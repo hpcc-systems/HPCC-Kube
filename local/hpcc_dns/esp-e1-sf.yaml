@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-e1
+#  namespace: default
+  labels:
+    app: esp-e1
+spec:
+  #ports:
+  #- port: 8010
+  #  name: esp-e1
+  selector:
+    app: svc-e1
+  clusterIP: None
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ew-e1
+#  namespace: default
+  labels:
+    app: esp-e1
+spec:
+  ports:
+  - port: 8010
+    name: eclwatch
+    nodePort: 32000
+    targetPort: 8010
+    protocol: TCP
+  selector:
+    app: svc-e1
+  type:
+    #LoadBalancer
+    NodePort
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: esp-e1
+spec:  # specification of the pod’s contents
+  serviceName: "svc-e1"
+  #serviceName: ew-e1
+  replicas: 2
+  selector:
+    matchLabels:
+      app: svc-e1
+  template:
+    metadata:
+      labels:
+        app: svc-e1
+    spec:
+      containers:
+        - name: esp-e1
+          image: "hpccsystems/hpcc:7.2.20-1"
+          ports:
+            - name: eclwatch
+              containerPort: 8010
+            #- name: wsecl
+            #  containerPort: 8010
+            #- name: roxie
+            #  containerPort: 9876

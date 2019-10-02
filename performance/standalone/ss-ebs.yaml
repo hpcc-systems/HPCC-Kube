@@ -1,0 +1,73 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-node
+  # namespace: default
+  labels:
+    app: node
+spec:
+  selector:
+    app: svc-node
+  ports:
+  - protocol: TCP
+    port: 8010
+    targetPort: 8010
+    name: eclwatch
+  - protocol: TCP
+    port: 8002
+    targetPort: 8002
+    name: wsecl
+  - protocol: TCP
+    port: 8510
+    targetPort: 8510
+    name: wssql
+  - protocol: TCP
+    port: 9876
+    targetPort: 9876
+    name: roxie
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: node
+spec:  # specification of the pod’s contents
+  serviceName: "svc-node"
+  replicas: 1
+  #podManagementPolicy: "Parallel"  # the default is "OrderedReady"
+  selector:
+    matchLabels:
+      app: svc-node
+  template:
+    metadata:
+      labels:
+        app: svc-node
+    spec:
+      containers:
+      - name:  node
+        image: "hpccsystems/platform"
+        ports:
+        - name: roxie
+          containerPort: 9876
+        - name: eclwatch
+          containerPort: 8010
+        - name: wsecl
+          containerPort: 8002
+        - name: wssql
+          containerPort: 8510
+        resources:
+          requests:
+            cpu: "32"
+            memory: "128Gi"
+        volumeMounts:
+        - mountPath: "/var/lib/HPCCSystems"
+          name: ebs
+  volumeClaimTemplates:
+  - metadata:
+      name: ebs
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: gp2
+      resources:
+        requests:
+          storage: 320Gi

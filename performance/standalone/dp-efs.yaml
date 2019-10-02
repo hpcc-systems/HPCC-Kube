@@ -1,0 +1,75 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-efs-node
+spec:
+  selector:
+    app: efs-node
+  ports:
+  - protocol: TCP
+    port: 8010
+    targetPort: 8010
+    name: eclwatch
+  - protocol: TCP
+    port: 8002
+    targetPort: 8002
+    name: wsecl
+  - protocol: TCP
+    port: 8510
+    targetPort: 8510
+    name: wssql
+  - protocol: TCP
+    port: 9876
+    targetPort: 9876
+    name: roxie
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: efs-node
+  labels:
+    app: efs-node
+spec:  # specification of the pod’s contents
+  replicas: 1
+  selector:
+    matchLabels:
+      app: efs-node
+  template:
+    metadata:
+      labels:
+        app: efs-node
+    spec:
+      containers:
+      - name:  efs-node
+        image: "hpccsystems/platform"
+        ports:
+        - name: roxie
+          containerPort: 9876
+        - name: eclwatch
+          containerPort: 8010
+        - name: wsecl
+          containerPort: 8002
+        - name: wssql
+          containerPort: 8510
+        resources:
+          requests:
+            cpu: "32"
+            memory: "128Gi"
+        volumeMounts:
+        -  name: node-efs-data
+           mountPath: "/var/lib/HPCCSystems/hpcc-data"
+        -  name: node-efs-mirror
+           mountPath: "/var/lib/HPCCSystems/hpcc-mirror"
+        -  name: node-efs-queries
+           mountPath: "/var/lib/HPCCSystems/queries"
+      volumes:
+      - name: node-efs-data
+        persistentVolumeClaim:
+          claimName: efs-data
+      - name: node-efs-mirror
+        persistentVolumeClaim:
+          claimName: efs-mirror
+      - name: node-efs-queries
+        persistentVolumeClaim:
+          claimName: efs-queries

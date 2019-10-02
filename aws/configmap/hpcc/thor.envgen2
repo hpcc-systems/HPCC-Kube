@@ -1,0 +1,4 @@
+#Modify environment with envgen2 syntax.
+#There are override.envgen2 and xpath_attributes.envgen2 for use "-override" and  "-set-xpath-attrib-value" respectly
+
+#-mod thor@slavesPerNode=8^globalMemorySize=8192

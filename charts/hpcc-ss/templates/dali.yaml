@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dali
+spec:  # specification of the pod’s contents
+  restartPolicy: {{ .Values.Dali.RestartPolicy }}
+  containers:
+  - name:  dali
+    image: {{ .Values.Hpccsystems.Platform.Image }}
+{{- if .Values.Persistence.Config.Enabled }}
+    volumeMounts:
+    - mountPath: "/var/lib/HPCCSystems"
+      name: dali-data
+  volumes:
+  - name: dali-data
+    persistentVolumeClaim:
+      claimName: ebs-dali
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ebs-dali
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: {{ .Values.Persistence.Config.StorageClass }}
+  resources:
+    requests:
+      storage: {{ .Values.Dali.Volume.Size }}
+{{- end }}

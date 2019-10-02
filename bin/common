@@ -1,0 +1,11 @@
+KUBECTL=kubectl
+OS=$(uname)
+if [ "$OS" =  "Linux" ] || [ "$OS" = "Darwin" ]
+then
+  if [ -n "$(which kubectl.sh)" ]
+  then
+    KUBECTL=kubectl.sh
+  else
+    KUBECTL=kubectl
+  fi
+fi

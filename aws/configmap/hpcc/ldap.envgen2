@@ -1,0 +1,4 @@
+#Modify environment with envgen2 syntax.
+#There are override.envgen2 and xpath_attributes.envgen2 for use "-override" and  "-set-xpath-attrib-value" respectly
+
+-add sw:ldap#myldap@esp=myesp^adminGroupName=HPCCAdmins160^cacheTimeout=5^filesBasedn=\\\"ou[equal]files,ou[equal]ecl,ou[equal]hpcc\\\"^groupsBasedn=\\\"ou[equal]groups,ou[equal]hpcc\\\"

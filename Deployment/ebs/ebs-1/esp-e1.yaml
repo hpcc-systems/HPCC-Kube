@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ew-esp1
+#  namespace: default
+spec:
+  selector:
+    app: esp-esp1
+  ports:
+  - protocol: TCP
+    port: 8010
+    targetPort: 8010
+    #nodePort: 31000  #local
+  type:
+    LoadBalancer
+    #NodePort   #local
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: esp-esp1
+  labels:
+    app: esp-esp1
+spec:  # specification of the pod’s contents
+  replicas: 1
+  selector:
+     matchLabels:
+       app: esp-esp1
+       cluster: esp1
+  template:
+    metadata:
+      labels:
+        cluster: esp1
+        app: esp-esp1
+    spec:
+      containers:
+        - name: esp-esp1
+          image: "hpccsystems/platform"
+          ports:
+          - name: eclwatch
+            containerPort: 8010
+          - name: eclwatch-https
+            containerPort: 18010
+          - name: wsecl
+            containerPort: 8002
+          - name: wsecl-https
+            containerPort: 18002
+          - name: wssql
+            containerPort: 8510
+          - name: wssql-https
+            containerPort: 18510

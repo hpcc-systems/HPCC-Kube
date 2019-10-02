@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hpcc
+spec:  # specification of the pod’s contents
+  restartPolicy: Never
+  containers:
+    - name: hpcc
+      image: "hpccsystems/platform"
+      ports:
+      - name: eclwatch
+        containerPort: 8010
+      - name: eclwatch-https
+        containerPort: 18010
+      - name: wsecl
+        containerPort: 8002
+      - name: wsecl-https
+        containerPort: 18002
+      - name: wssql
+        containerPort: 8510
+      - name: wssql-https
+        containerPort: 18510

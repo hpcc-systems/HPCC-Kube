@@ -1,0 +1,12 @@
+apiVersion: v1
+name: hpccsystems
+version: 1.0.0
+appVersion: 7.4.20
+description: End-to-end big data in a massively scalable supercomputing platform.
+home: http://hpccsystems.com
+icon: https://hpccsystems.com/sites/default/files/header-logo_0.png
+sources:
+  - https://github.com/hpcc-systems/HPCC-Platform
+maintainers:
+  - name: Wang,Xiaoming
+    email: xiaoming.wang@lexisnexis.com

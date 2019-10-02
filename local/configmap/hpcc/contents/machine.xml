@@ -1,0 +1,7 @@
+#<!--XPATH: Hardware -->
+
+ <ComputerType computerType="PowerEdge"
+                manufacturer="Dell"
+                name="dell-server-1"
+                nicSpeed="1000"
+                opSys="linux"/>

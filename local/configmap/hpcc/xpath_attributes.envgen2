@@ -1,0 +1,5 @@
+# Set attribute values with Xpath like in envgen
+# Give one setting per line with commas as column seperator in chance column value has space:
+
+#Software/Topology/Cluster[@name=\\\"thor\\\"]/ThorCluster,@process,thor123
+#Software/RoxieCluster/",roxieMulticastEnabled,false

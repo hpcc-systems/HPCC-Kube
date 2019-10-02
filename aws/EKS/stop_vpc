@@ -1,0 +1,7 @@
+#!/bin/bash
+# Make sure both EKS and CloudFormation Stack resources are cleaned
+
+name=hpccd
+[ -n "$1" ] && name=$1
+#eksctl delete cluster hpcc1
+eksctl delete cluster $name

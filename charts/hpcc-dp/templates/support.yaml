@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: support
+  namespace: {{ .Values.NameSpace.Name }}
+  labels:
+    app: support
+spec:  # specification of the pod’s contents
+  replicas: 1
+  selector:
+    matchLabels:
+      app: support
+      cluster: support
+  template:
+    metadata:
+      labels:
+        app: support
+        cluster: support
+    spec:
+      containers:
+      - name: support
+        image: {{ .Values.Hpccsystems.Platform.Image }}
+        {{- if .Values.AWS.EFS.Enabled }}
+        volumeMounts:
+        - mountPath: "/var/lib/HPCCSystems"
+          name: support-data
+        {{- end }}
+      {{- if .Values.AWS.EFS.Enabled }}
+      volumes:
+      - name: support-data
+        persistentVolumeClaim:
+          claimName: {{ .Values.global.EFS.ClaimName.Default }}
+      {{- end }}

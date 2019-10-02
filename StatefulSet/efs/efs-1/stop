@@ -1,0 +1,24 @@
+#!/bin/bash
+WORK_DIR=$(dirname $0)
+. ${WORK_DIR}/../../../bin/common
+
+
+${KUBECTL} delete -f admin.yaml
+${KUBECTL} delete -f dali.yaml
+${KUBECTL} delete -f support.yaml
+${KUBECTL} delete -f esp-e1.yaml
+#${KUBECTL} delete -f esp-e1-https.yaml
+${KUBECTL} delete -f roxie-r1.yaml
+${KUBECTL} delete -f roxie-r2.yaml
+${KUBECTL} delete -f thormaster-t1.yaml
+${KUBECTL} delete -f thor-t1.yaml
+
+kubectl get pvc | grep "^efs-"| cut -d' ' -f1 | while read name
+do
+  ${KUBECTL} delete pvc $name
+done
+
+#kubectl get pv | grep "^pvc"| cut -d' ' -f1 | while read name
+#do
+#  ${KUBECTL} delete pv $name
+#done

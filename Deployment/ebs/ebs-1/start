@@ -1,0 +1,9 @@
+#!/bin/bash
+WORK_DIR=$(dirname $0)
+. ${WORK_DIR}/../../../bin/common
+
+${KUBECTL} create -f admin.yaml
+${KUBECTL} create -f dali.yaml
+${KUBECTL} create -f support.yaml
+${KUBECTL} create -f esp-e1.yaml
+${KUBECTL} create -f roxie-r1.yaml

@@ -1,0 +1,9 @@
+# Override attribute values like in envgen
+# -override "espsmc,@enableSystemUseRewrite,ture"
+# Give a setting per line:
+
+#espsmc,@enableSystemUseRewrite,ture
+roxie,@copyResources,true
+roxie,@roxieMulticastEnabled,false
+thor,@replicateOutputs,true
+esp,@method,htpasswd

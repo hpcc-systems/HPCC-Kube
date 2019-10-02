@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: thor-thor1
+spec:  # specification of the pod’s contents
+  replicas: 2
+  selector:
+    matchLabels:
+      app: thor-thor1
+  template:
+    metadata:
+      labels:
+        app: thor-thor1
+    spec:
+      containers:
+      - name:  thor-thor1
+        image: "hpccsystems/platform"
+        volumeMounts:
+        - mountPath: "/var/lib/HPCCSystems/hpcc-data"
+          name: thor1-efs-data
+        - mountPath: "/var/lib/HPCCSystems/hpcc-mirror"
+          name: thor1-efs-mirror
+        - mountPath: "/var/lib/HPCCSystems/queries"
+          name: thor1-efs-queries
+      volumes:
+      - name: thor1-efs-data
+        persistentVolumeClaim:
+          claimName: efs-data
+      - name: thor1-efs-mirror
+        persistentVolumeClaim:
+          claimName: efs-mirror
+      - name: thor1-efs-queries
+        persistentVolumeClaim:
+          claimName: efs-queries

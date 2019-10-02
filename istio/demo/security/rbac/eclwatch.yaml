@@ -1,0 +1,14 @@
+apiVersion: "rbac.istio.io/v1alpha1"
+kind: ServiceRole
+metadata:
+  name: eclwatch
+  namespace: default
+spec:
+  rules:
+  - services: ["esp-e1.default.svc.cluster.local"]
+
+  #- services: ["*"]
+  #- services: ["esp-e1"]
+  #  constraints:
+  #  - key: "destination.port"
+  #    values: ["8010"]

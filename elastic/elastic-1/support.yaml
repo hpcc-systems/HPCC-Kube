@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: support
+  labels:
+    app: support
+spec:  # specification of the pod’s contents
+  replicas: 1
+  selector:
+    matchLabels:
+      app: support
+      cluster: support
+  template:
+    metadata:
+      labels:
+        app: support
+        cluster: support
+    spec:
+      containers:
+        - name: support
+          image: "hpccsystems/hpcc-elastic"

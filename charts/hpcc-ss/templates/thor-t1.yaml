@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.Thor.Cluster1.ServiceName }}
+  namespace: {{ .Values.NameSpace.Name }}
+  labels:
+    app: thor-{{ .Values.Thor.Cluster1.Name }}
+spec:
+  selector:
+    app: {{ .Values.Thor.Cluster1.ServiceName }}
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: thor-{{ .Values.Thor.Cluster1.Name }}
+  namespace: {{ .Values.NameSpace.Name }}
+spec:  # specification of the pod’s contents
+  name: {{ .Values.Thor.Cluster1.ServiceName }}
+  replicas: {{ .Values.Thor.Cluster1.Replicas }}
+  podManagementPolicy: {{ .Values.Thor.Cluster1.PodManagementPolicy | quote }}
+  selector:
+    matchLabels:
+      app: {{ .Values.Thor.Cluster1.ServiceName }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.Thor.Cluster1.ServiceName }}
+    spec:
+      containers:
+      - name:  thor-{{ .Values.Thor.Cluster1.Name }}
+        image: {{ .Values.Hpccsystems.Platform.Image }}
+  {{- if .Values.Persistence.Config.Enabled }}
+        volumeMounts:
+        - mountPath: "/var/lib/HPCCSystems"
+          name: ebs
+  volumeClaimTemplates:
+  - metadata:
+      name: ebs
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: {{ .Values.Persistence.Config.StorageClass }}
+      resources:
+        requests:
+          storage: {{ .Values.Thor.Cluster1.Volume.Size }}
+  {{- end }}

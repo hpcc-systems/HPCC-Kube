@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: support
+spec:  # specification of the pod’s contents
+  replicas: 1
+  selector:
+     cluster: support
+  template:
+    metadata:
+      labels:
+        cluster: support
+    spec:
+      containers:
+        - name: support
+          image: "hpccsystems/platform"

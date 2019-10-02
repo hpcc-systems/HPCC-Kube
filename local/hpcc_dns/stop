@@ -1,0 +1,17 @@
+#!/bin/bash
+
+WORK_DIR=$(dirname $0)
+. ${WORK_DIR}/../../bin/common
+
+
+${KUBECTL} delete -f admin.yaml
+#${KUBECTL} delete -f dali-sf.yaml
+${KUBECTL} delete -f support-sf.yaml
+${KUBECTL} delete -f esp-e1-sf.yaml
+
+
+#${KUBECTL} delete -f support.yaml
+#${KUBECTL} delete svc esp-e1
+##${KUBECTL} delete -f roxie-r1.yaml
+#${KUBECTL} delete -f thormaster-t1.yaml
+#${KUBECTL} delete -f thor-t1.yaml
