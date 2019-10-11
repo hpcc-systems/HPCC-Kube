@@ -1,33 +1,36 @@
 # Deploy Dali/Sasha/DropZone/Roxie/Thor Pods as Deployment/EFS
 
-Generally this is prefer way to deploy cluster with EFS since typically share mode is ReadWriteMany.
+Generally this is preferred way to deploy a cluster with EFS since share mode is typically ReadWriteMany.
 
 Current deployment has Sasha/DropZone in support Pod.
 
 Even EFS performance may not be good as EBS but EFS it is very convenient such as:
 - Don't need worry about cross AZz
 - Easy to share and re-use data
-- Don't need to worry to delete volume after deleting Pod.
+- Don't need to worry about deleting volume after deleting Pod.
 
-EFS is little expensive than EBS.
+EFS is a little more expensive than EBS.
 
 ## Persistent Volumes
 One EFS server is used for persistent storage.
-There are four type persistent volume claims:
+There are four types of persistent volume claims:
   - efs: /var/lib/HPCCSystems (support node and possible for dali node)
   - efs-data: /var/lib/HPCCSystems/hpcc-data  (dali/roxie/thor)
   - efs-mirror: /var/lib/HPCCSysterms/hpcc-mirror (dali/roxie/thor)
   - efs-queries: /var/lib/HPCCSystems/queries (roxie/thor)
 
 ## Performance
-to do (compare EFS and EBS)
+### compare EFS and EBS
+We did similar performance testing on single node with 32 cores and 128 GB memory.
+EBS generally has at lest 5-6 seconds advantage compared with EFS, particular for short during tests.
+
 
 ## Prerequisities
 - Bootstrap
   ```console
   bin/bootstrap-aws.sh
   ```
-  "bootstrap-aws.sh" includes apply Kubernetes API RBAC roles and set configmap "hpcc-config" for environment.xml generation.  If configmap "hpcc-config" not set user can provide configmap under ./hpcc-config and apply it in ./start script. See [aws/configmap/README.md](../../../aws/configmap/README.md) for more detail about configmap settings
+  "bootstrap-aws.sh" includes apply Kubernetes API RBAC roles and sets configmap "hpcc-config" for environment.xml generation.  If configmap "hpcc-config" is not set user can provide configmap under ./hpcc-config and apply it in ./start script. See [aws/configmap/README.md](../../../aws/configmap/README.md) for more detail about configmap settings
 
 - Start NFS server
   in efs/
@@ -130,7 +133,8 @@ ew-esp1      LoadBalancer   10.100.248.99   a0e9629f2da3811e9b1b40aa0a5b6276-205
 ECLWatch URL: http://a0e9629f2da3811e9b1b40aa0a5b6276-2050531242.us-east-1.elb.amazonaws.com:8010
 
 ## Scale up/down
-Original roxie-roxie1 cluster has 2 instances. To increase it to 4 instances:
+Original roxie-roxie1 cluster has 2 instances.
+To increase it to 4 instances:
 ```console
 kubeclt scale --replicas 6 StatefulSet/roxie-roxie1
 

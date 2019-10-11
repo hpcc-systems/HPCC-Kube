@@ -32,8 +32,8 @@ Query EKS cluster
 ```sh
 eksctl get cluster
 ```
-When ESK cluster created successfully it should be in ~/.kube/config.  kubectl need this information to deploy clusters.
-If the EKS cluster doesn't exists in ~/.kube/config, for example you are in a different system than the original one to create EKS cluster, you can run following to create this configuration file:
+When EKS cluster created successfully it should be in ~/.kube/config.  kubectl need this information to deploy clusters.
+If the EKS cluster doesn't exist in ~/.kube/config, for example you are in a different system than the original one to create EKS cluster, you can run following to create this configuration file:
 ```sh
 eksctl utils write-kubeconfig --name <cluster name>
 ```

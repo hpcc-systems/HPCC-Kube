@@ -26,7 +26,7 @@ cd bin/
 ```
 
 ### Start Cluster
-Start one support node (include Dali) and two esp nodes
+Start one support node (include Dali) and two ESP nodes
 ```sh
 cd local/hpcc_dns
 ./start
@@ -64,7 +64,7 @@ svc-support   ClusterIP   None         <none>        <none>           3m53s
 ```
 
 Query FQDN
-There is one support node include "Dali" and two esp nodes deployed. All three can be searched by FQDN. Since current contain image doesn't include nsloop or related, ping can be used.
+There is one support node including "Dali" and two ESP nodes deployed. All three can be searched by FQDN. Since current contain image doesn't include nsloop or related, ping can be used.
 
 To check the FQDN settings
 kubectl.sh exec -it <pod name> -- cat /etc/resolv.conf
@@ -82,18 +82,18 @@ kubectl.sh exec -it esp-e1-0 -- ping -c 1 support-0.svc-support
 PING support-0.svc-support.default.svc.cluster.local (172.17.0.3) 56(84) bytes of data.
 64 bytes from support-0.svc-support.default.svc.cluster.local (172.17.0.3): icmp_seq=1 ttl=64 time=0.073 ms
 ```
-Every "StatefulSet" definition requires a headless service to make FQDN work. Above support Pod has the headless service "svc-support".  We currently deploy everything in Kubernetes default namespace "default". The default domain is "cluster.local". The complet FQDN for support-0 should be "support-0.svc-support.default.svc.cluster.local"
+Every "StatefulSet" definition requires a headless service to make FQDN work. Above support Pod has the headless service "svc-support".  We currently deploy everything in Kubernetes default namespace "default". The default domain is "cluster.local". The complete FQDN for support-0 should be "support-0.svc-support.default.svc.cluster.local"
 
 
 ### Configure Cluster
 Note: this process will be automated soon
-Following will collect all HPCC node names and ips and generate environment.xml, transfer the file to all nodes and start HPCC Cluster
+Following will collect all HPCC Systems node names and ips and generate environment.xml, transfer the file to all nodes and start HPCC Systems Cluster
 ```sh
 cd bin/
 ./cluster_config.sh
 ```
 
-All availalble HPCC componenets include Esp are listed.
+All availalble HPCC components include Esp are listed.
 
 Access EclWatch
 A service "ew-e1" is defined for ESP "e1" cluster. Ideally it should be configured as "LoadBalancer" and get external ip from the network. But this will not be possible in our working environment. In most commercial cloud solution this shouldn't be a problem.

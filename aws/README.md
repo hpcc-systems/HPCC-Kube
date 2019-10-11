@@ -5,7 +5,7 @@
 Elastic Kubernetes Service (EKS)
 
 ## configmap
-Properites files for generate environment.xml
+Properites files for generating environment.xml
 
 ## nfs
 An old Replicationcontroller with NFS sample. Just keep it here for reference

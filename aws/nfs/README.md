@@ -1,10 +1,10 @@
 # HPCC-Kubernetes on AWS
 
-## Persisten Volume
+## Persistent Volume
 ### Create EBS
 Will show how to add two types of volumes: 1) indiviual store for each pod 2) shared nfs storage
 
-Create an EBS for individual Storege for /var/lib/HPCCSystems and /var/log/HPCCSystems
+Create an EBS for individual Storage for /var/lib/HPCCSystems and /var/log/HPCCSystems
 ```sh
 aws ec2 create-volume --availability-zone ap-southeast-1b --size 20 --volume-type gp2
 ```
@@ -80,13 +80,13 @@ Deploy nfs service
    kubectl create -f nfs-server-service.yaml
 ```
 
-Get NFS service ip
+Get NFS service IP
 ```sh
 kubectl get service -o json | grep IP
 ```
 
 Create a Persistent Volume (PV) for NFS storage  nfs-pv.yaml
-It will reference NFS service ip
+It will reference NFS service IP
 ```sh
 apiVersion: v1
 kind: PersistentVolume

@@ -82,7 +82,7 @@ thor1           ( pid     4208 ) is running with 2 slave process(es) ...
 
 
 ## Access ECLWatch ###
-Get esp public ic:
+Get esp public ip or FQDN:
 ```console
 kubectl get service
 

@@ -1,7 +1,7 @@
 # Deploy Dali/Sasha/DropZone/Roxie/Thor Pods as StatefulSet/EFS
 
 Current deployment has Sasha/DropZone in support Pod.
-Attach ReadWriteMany EFS to Pods doesn't need StatefulSet. See Deployment/efs/efs-1/README.md. But for ReadWriteOnce EFS StatefulSet is required which is this setup about.
+Attach ReadWriteMany EFS to Pods doesn't need StatefulSet. See Deployment/efs/efs-1/README.md. But for ReadWriteOnce EFS StatefulSet is required which is what this setup is about.
 
 
 ## Prerequisities
@@ -65,7 +65,7 @@ efs-support-0        Bound    pvc-77771f35-da34-11e9-87ee-0e00576dcdfc   1Mi    
 efs-thor-thor1-0     Bound    pvc-7a852ef7-da34-11e9-87ee-0e00576dcdfc   1Mi        RWO            aws-efs        7m9s
 efs-thor-thor1-1     Bound    pvc-7d1062ef-da34-11e9-87ee-0e00576dcdfc   1Mi        RWO            aws-efs        7m5s
 ```
-To check clustr status:
+To check cluster status:
 ```console
 bin/cluster_run.sh status
 ```

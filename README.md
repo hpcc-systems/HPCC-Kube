@@ -1,5 +1,5 @@
 # Kubernetes Playground for HPCC Systems Products
-
+M
 This repo has several HPCC Systems Cluster examples on Kubernetes
 
 
@@ -11,8 +11,8 @@ We currently tested two cloud environments: [AWS/EKS](./aws/EKS/README.md) and [
 
 
 ## Bootstrap
-Bootstrap will grant access permission for Kubernetes APIs as well create configmap for environmet.xml configuration
-Depands on the Kubernetes environment configmap files may be different. Currently there is aws/configmap/hpcc for AWS environment and the other one is local/configmap/hpcc for local deployment.
+Bootstrap will grant access permission for Kubernetes APIs as well create a configmap for environmet.xml configuration
+Depanding on the Kubernetes environment configmap files may be different. Currently there is aws/configmap/hpcc for AWS environment and the other one is local/configmap/hpcc for local deployment.
 In bin directory
 ```sh
 # AWS
@@ -39,7 +39,7 @@ It is recommended to use "Deployment" instead
 
 ## [StatefulSet](StatefulSet/README.md)
 Deploy HPCC Systems cluster with StatefulSet Pod definition.
-It includs ebs and nfs examples
+It includs EBS and EFS examples
 Reference
   . [EBS README.md](StatefulSet/ebs/ebs-1/README.md)
   . [EFS README.md](StatefulSet/efs/efs-1/README.md)
@@ -52,7 +52,7 @@ Reference [README.md](istio/demo/README.md)
 
 [Helm Charts for HPCC Systems Cluster](charts/README.md)
 Mainly two charts:
-- hpcc-dp: deploy a cluster with Deployments/EFS.  EFS can be turn off so the cluster can be deployed in local environment
+- hpcc-dp: deploy a cluster with Deployments/EFS.  EFS can be turned off so the cluster can be deployed in local environment
 - hpcc-ss: deploy a cluster with StatefulSets/EBS
 
 
@@ -70,4 +70,4 @@ Filebeat, Metricbeat, etc example on local Kubernetes environment.
 Still in progress ...
 
 ## performance
-To do
+Standalone performance tests for both EBS and EFS.

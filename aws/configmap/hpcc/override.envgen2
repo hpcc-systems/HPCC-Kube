@@ -1,4 +1,4 @@
-# Override attribute values like in envgen
+# Override attribute values similar envgen
 # -override "espsmc,@enableSystemUseRewrite,ture"
 # Give a setting per line:
 

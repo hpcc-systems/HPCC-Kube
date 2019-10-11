@@ -58,7 +58,7 @@ thor1           ( pid     1214 ) is running with 1 slave process(es) ...
 ``
 
 ## Scale up/down
-Original roxie-roxie1 cluster has 1 instances. To increase it to 4 instances:
+Original roxie-roxie1 cluster has 2 instances. To increase it to 4 instances:
 ```console
 kubeclt scale --replicas 2 StatefulSet/roxie-roxie1
 NAME                               READY   STATUS    RESTARTS   AGE
@@ -81,9 +81,9 @@ A sample autoscaling yaml file is provided. You can modify it and apply it
 ```console
 kubectl apply -f esp-e1-hpa.yaml
 ```
-Increase esp Pod cpu, for example run a big loop and monitor the auto-scaling.
+Increase ESP pod CPU. For example run a big loop and monitor the auto-scaling.
 
-The disable auto-scaling:
+To disable auto-scaling:
 ```console
 kubectl delete -f esp-e1-hpa.yaml
 ```

@@ -19,4 +19,5 @@ nohup  ./ecl-test --timeout -1 --suiteDir ${PERF_DIR}/PerformanceTesting run -t=
 #nohup  ./ecl-test --timeout -1 --suiteDir ${PERF_DIR}/PerformanceTesting run -t=roxie >> /tmp/perf_roxie.out 2>&1 &
 
 #nohup  ./ecl-test --timeout -1 --suiteDir ${PERF_DIR}/PerformanceTesting setup -t=hthor > /tmp/perf_hthor.out 2>&1
+#nohup  ./ecl-test --timeout -1 --suiteDir ${PERF_DIR}/PerformanceTesting setup -t=thor >> /tmp/perf_hthor.out 2>&1
 #nohup  ./ecl-test --timeout -1 --suiteDir ${PERF_DIR}/PerformanceTesting run -t=hthor >> /tmp/perf_hthor.out 2>&1 &
