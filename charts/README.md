@@ -49,3 +49,10 @@ helm list
 ```console
 helm delete --purge hpcc-cluster
 ```
+
+### Delete EBS
+Delete the cluster will remove EBS in hpcc-ss
+To delete the EBS volumes:
+```console
+delete-ebs.sh
+```

@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: roxie-roxie1
+spec:  # specification of the pod’s contents
+  replicas: 20
+  selector:
+    matchLabels:
+      app: roxie-roxie1
+  template:
+    metadata:
+      labels:
+        app: roxie-roxie1
+    spec:
+      containers:
+      - name:  roxie-roxie1
+        image: "hpccsystems/platform"
+        ports:
+        - name: roxie
+          containerPort: 9876
+        - name: roxie-secure
+          containerPort: 19876
+        volumeMounts:
+        -  name: roxie1-efs-data
+           mountPath: "/var/lib/HPCCSystems/hpcc-data"
+        -  name: roxie1-efs-mirror
+           mountPath: "/var/lib/HPCCSystems/hpcc-mirror"
+        -  name: roxie1-efs-queries
+           mountPath: "/var/lib/HPCCSystems/queries"
+        resources:
+          requests:
+            cpu: "4"
+            memory: "8Gi"
+      volumes:
+      - name: roxie1-efs-data
+        persistentVolumeClaim:
+          claimName: efs-data
+      - name: roxie1-efs-mirror
+        persistentVolumeClaim:
+          claimName: efs-mirror
+      - name: roxie1-efs-queries
+        persistentVolumeClaim:
+          claimName: efs-queries
