@@ -22,19 +22,28 @@ export KUBE_ZONE2=us-east-1c
 eksctl create cluster \
 	--name hpcc-vpa \
 	--version 1.13 \
+	 --zones $KUBE_ZONE  --zones $KUBE_ZONE2 \
 	--nodegroup-name standard-workers \
-	--node-type m4.2xlarge \
-	--nodes 3 \
-	--nodes-min 1 \
-	--nodes-max 4 \
-	--node-volume-size 100 \
+        --node-type m4.2xlarge \
+	--nodes 1 \
+	--node-volume-size 160 \
 	--node-ami auto \
-	--vpc-public-subnets subnet-eaacfdb6 \
-	--vpc-public-subnets subnet-9e08ecd3 \
 	--node-security-groups sg-397a1a62 \
 	--tags "application=hpccsystems,lifecycle=dev,market=hpccsystems" \
 	--tags "owner_email=xiaoming.wang@lexisnexis.com" \
-	--tags "support_email=xiaoming.wang@lexisnexis.com" \
+        --tags "support_email=xiaoming.wang@lexisnexis.com" \
 	--tags "product=hpccsystems,project=hpcc builds,service=ecs"
+
+#	--vpc-public-subnets subnet-9e08ecd3 \
+#        --vpc-public-subnets subnet-eaacfdb6 \
+#	--nodes-min 1 \
+#	--nodes-max 1 \
 # --region us-east-1 \
 # vpc setting can co-existi with zones settings
+#  vCPU 8, Mem (GiB) 32
+#--node-type m4.2xlarge \
+#--node-type m5.12xlarge \
+# us-east-1c
+#--vpc-public-subnets subnet-eaacfdb6 \
+# us-east-1b
+#--vpc-public-subnets subnet-9e08ecd3 \

@@ -1,5 +1,5 @@
 ################################################################################
-#    HPCC SYSTEMS software Copyright (C) 2019 HPCC Systems®    .
+#    HPCC SYSTEMS software Copyright (C) 2019 HPCC Systems® .
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");
 #    you may not use this file except in compliance with the License.
@@ -13,22 +13,10 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 ################################################################################
-#Generate two default topologies for Roxie and Thor
-#default=true
-
-#Define particular topology
-#<Roxie|Thor cluster name>.topology=<value>  # default is topology if not list
-#<Roxie|Thor cluster name>.name=<value>
-#<Thor cluster name>.eclagent=<value>        # default is myeclagent
-#<Roxie|Thor cluster name>.eclccserver=<value>  # default is myeclccserver
-#<Roxie|Thor cluster name>.eclscheduler=<value>  # default is myeclscheduler
-#...
-thor1.name=thor-1
-thor1.eclagent=myeclagent
-thor1.eclccserver=myeclccserver
-thor1.eclscheduler=myeclscheduler
-
-roxie1.name=roxie-1
-#Will use default values for the rest
-
-roxie2.name=roxie-2
+kubectl.exe create -f admin.yaml
+kubectl.exe create -f support.yaml
+kubectl.exe create -f esp-e1.yaml
+#kubectl.exe create -f esp-e1-https.yaml
+kubectl.exe create -f roxie-r1.yaml
+kubectl.exe create -f thormaster-t1.yaml
+kubectl.exe create -f thor-t1.yaml
