@@ -18,12 +18,12 @@
 HPCC Systems Cluster Operations
 
 .DESCRIPTION
-Configure HPCC Systems Cluster
+Start configmgr
 
- Usage:  cluster_config.ps1 
+ Usage:  start_configmr.ps1 
 
 .Example
-./cluster_cluster.ps1
+./start_configmgr.ps1
 
 .
 .LINK
@@ -45,7 +45,7 @@ $KUBECTL = "kubectl.exe"
 cd $wkDir
 
 
-$cmd = "$KUBECTL exec $admin_pod -- /opt/hpcc-tools/config_hpcc.sh"
+$cmd = "$KUBECTL exec $admin_pod -- /opt/HPCCSystems/sbin/configmgr"
 
 "$cmd"
 iex "$cmd"
