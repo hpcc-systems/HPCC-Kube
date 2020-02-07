@@ -19,7 +19,6 @@ WORK_DIR=$(dirname $0)
 
 
 ${KUBECTL} delete -f admin.yaml
-${KUBECTL} delete -f dali.yaml
 ${KUBECTL} delete -f support.yaml
 ${KUBECTL} delete -f esp-e1.yaml
 #${KUBECTL} delete -f esp-e1-https.yaml

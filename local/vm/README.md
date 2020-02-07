@@ -11,6 +11,11 @@ For kubectl command, on Windows some times youo can run kubectl but some environ
   ```console
   bin/bootstrap.ps1
   ```
+
+## Deploy with HELM
+Reference [charts/README.md](file://../../charts/README.md)
+
+
 ## Deploy HPCC Systems Cluster
 ```console
 ###Windows

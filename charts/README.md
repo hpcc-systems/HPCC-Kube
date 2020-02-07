@@ -26,25 +26,56 @@ EFS settings are provided in "global.EFS.xxx" in values.yaml which includes regi
 EFS server chart is under hpcc-dp/charts/efs
 
 ## Apply Tiller RBAC
-```console
-./tiller-rbac.sh
-```
+This is not needed for latest Helm. Will double check
+#```console
+#./tiller-rbac.sh
+#```
 
 ## Use HELM
 ### Dry-run
 ```console
-helm install --name hpcc-cluster --dry-run --debug  ./<hpcc-dp | hpcc-ss>
+helm install --name hpcc-cluster --dry-run --debug  ./<hpcc-vm|hpcc-dp | hpcc-ss>
 ```
 
 
 ### Start a Cluster
 ```console
-helm install --name hpcc-cluster ./<hpcc-dp|hpcc-ss>
+helm install --name hpcc-cluster ./<hpcc-vm|hpcc-dp|hpcc-ss>
 ```
 
 ```console
 helm list
 ```
+
+### Upgrade a Cluster
+```console
+helm upgrade --name hpcc-cluster ./<hpcc-vm|hpcc-dp|hpcc-ss> --set <variable name>=<new value>
+```
+For example, change Docker image from vm to platform
+```console
+helm upgrade --name hpcc-cluster ./hpcc-vm --set Hpccsystems.Platform.Image="hpccsystems/platform"
+Release "hpcc-cluster" has been upgraded. Happy Helming!
+NAME: hpcc-cluster
+LAST DEPLOYED: Fri Feb  7 13:05:21 2020
+NAMESPACE: default
+STATUS: deployed
+REVISION: 2
+TEST SUITE: None
+
+kubectl get pods
+NAME                           READY   STATUS    RESTARTS   AGE
+esp-esp1-868bc9dccd-48r2k      1/1     Running   0          2m22s
+hpcc-admin                     1/1     Running   0          10m
+roxie-roxie1-696b49c55-c6gw8   1/1     Running   0          2m22s
+roxie-roxie1-696b49c55-vpdxp   1/1     Running   0          2m19s
+support-5f66f4c6d5-tglxv       1/1     Running   0          2m22s
+thor-thor1-57956cc97-hlvtl     1/1     Running   0          2m18s
+thor-thor1-57956cc97-p7b5h     1/1     Running   0          2m22s
+thormaster-thor1               1/1     Running   1          10m
+```
+
+Notice above thormaster-thor1 "AGE" is not changed it was showed as "RESTARTS" by 1.  This is due the Pod type of "Pod". If you check with "kubectl exec" you should see packages changed.
+
 ### Stop the Cluster
 ```console
 helm delete --purge hpcc-cluster

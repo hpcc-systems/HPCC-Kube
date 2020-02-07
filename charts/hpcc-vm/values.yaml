@@ -1,0 +1,135 @@
+# Default values for hpcc-dp.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+global:
+
+Hpccsystems:
+  Platform:
+    Image:  "hpccsystems/vm"
+
+
+Cloud:
+  Type: local
+
+Volumes:
+  HostPath:
+    Enabled: true
+    Data:   /HPCCSystems/hpcc-data
+    Data1:  /HPCCSystems/hpcc-data1
+    Data2:  /HPCCSystems/hpcc-data2
+    Data3:  /HPCCSystems/hpcc-data3
+    Mirror: /HPCCSystems/hpcc-mirror
+    Queries: /HPCCSystems/hpcc-queries
+    Type: DirectoryOrCreate
+
+NameSpace:
+  Name: default
+
+ServiceAccount:
+  Name: default
+
+Control:
+  ClusterRole:
+    Name: hpcc-roles
+  ClusterRoleBinding:
+    Name: hpcc-binding
+
+EntryPoint:
+  Auto: true # Automatically configure HPCC Systems Cluster
+
+Secure: false # true (https) or false (http)
+
+ConfigMgr:
+  Name: "configmgr"
+  Port: 8015
+  SecuirePort: 18015
+
+Admin:
+  ServiceName: "hpcc-admin"
+  AppName: "hpcc-admin"
+  Image: "hpccsystems/hpcc-admin"
+  ServiceType: LoadBalancer
+  LocalServiceType: NodePort
+  RestartPolicy: Always
+  ConfigMap:
+    Name: "hpcc-config"
+    VolumeName: "env-config"
+    MountPath: "/etc/hpcc_config_map"
+  EntryPoint:
+    Command: ["/opt/hpcc-tools/run"]
+    ArgsAuto: ["-e", "kube"]
+    Args: ["-D"]
+
+Esp:
+  ServiceType: LoadBalancer
+  LocalServiceType: NodePort
+  Cluster1:
+    Name: esp1
+    ServiceName: ew-esp1
+    Replicas: 1
+    EclWatch:
+      Name: eclwatch
+      Port: 8010
+      SecurePort: 18010
+    WsEcl:
+      Name: wsecl
+      Port: 8002
+      SecurePort: 18002
+    WsSql:
+      Name: wssql
+      Port: 8510
+      SecurePort: 18510
+    Hpa:
+      Min: 1
+      Max: 4
+      CpuPercentage: 90
+  Cluster2:
+    Name: esp2
+    ServiceName: ew-esp2
+    EclWatch:
+      Port: 8010
+      SecurePort: 18010
+    WsEcl:
+      Port: 8002
+      SecurePort: 18002
+    WsSql:
+      Port: 8510
+      SecurePort: 18510
+
+
+Roxie:
+  ServiceType: LoadBalancer
+  LocalServiceType: NodePort
+  Cluster1:
+    Name: roxie1
+    ServiceName: roxie-roxie1
+    Replicas: 2
+    Server:
+      Name: server
+      Port: 9876
+      SecurePort: 19876
+  Cluster2:
+    Name: roxie2
+    ServiceName: roxie-roxie2
+    Replicas: 1
+    Server:
+      Port: 9876
+      SecurePort: 19876
+
+Dali:
+  RestartPolicy: Always
+
+Support:
+  Replicas: 1
+
+ThorMaster:
+  CompName: thormaster
+  RestartPolicy: Always
+
+Thor:
+  Cluster1:
+    Name: thor1
+    Replicas: 2
+  Cluster2:
+    Name: thor2
+    Replicas: 1

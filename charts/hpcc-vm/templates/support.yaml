@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: support
+  namespace: {{ .Values.NameSpace.Name }}
+  labels:
+    app: support
+spec:  # specification of the pod’s contents
+  replicas: 1
+  selector:
+    matchLabels:
+      app: support
+      cluster: support
+  template:
+    metadata:
+      labels:
+        app: support
+        cluster: support
+    spec:
+      containers:
+      - name: support
+        image: {{ .Values.Hpccsystems.Platform.Image }}
+        {{- if .Values.Volumes.HostPath.Enabled }}
+        volumeMounts:
+        - mountPath: "/var/lib/HPCCSystems/hpcc-data"
+          name: hpcc-data
+        - mountPath: "/var/lib/HPCCSystems/hpcc-data1"
+          name: hpcc-data1
+        - mountPath: "/var/lib/HPCCSystems/hpcc-data2"
+          name: hpcc-data2
+        - mountPath: "/var/lib/HPCCSystems/hpcc-data3"
+          name: hpcc-data3
+        - mountPath: "/var/lib/HPCCSystems/hpcc-mirror"
+          name: hpcc-mirror
+        {{- end }}
+      {{- if .Values.Volumes.HostPath.Enabled }}
+      volumes:
+      - name:  hpcc-data
+        hostPath:
+          path: {{ .Values.Volumes.HostPath.Data }}
+          type: {{ .Values.Volumes.HostPath.Type }}
+      - name:  hpcc-data1
+        hostPath:
+          path: {{ .Values.Volumes.HostPath.Data1 }}
+          type: {{ .Values.Volumes.HostPath.Type }}
+      - name:  hpcc-data2
+        hostPath:
+          path: {{ .Values.Volumes.HostPath.Data2 }}
+          type: {{ .Values.Volumes.HostPath.Type }}
+      - name:  hpcc-data3
+        hostPath:
+          path: {{ .Values.Volumes.HostPath.Data3 }}
+          type: {{ .Values.Volumes.HostPath.Type }}
+      - name: hpcc-mirror
+        hostPath:
+          path: {{ .Values.Volumes.HostPath.Mirror }}
+          type: {{ .Values.Volumes.HostPath.Type }}
+      {{- end }}

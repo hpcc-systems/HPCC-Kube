@@ -16,7 +16,7 @@ metadata:
   name: thor-{{ .Values.Thor.Cluster1.Name }}
   namespace: {{ .Values.NameSpace.Name }}
 spec:  # specification of the pod’s contents
-  name: {{ .Values.Thor.Cluster1.ServiceName }}
+  serviceName: {{ .Values.Thor.Cluster1.ServiceName }}
   replicas: {{ .Values.Thor.Cluster1.Replicas }}
   podManagementPolicy: {{ .Values.Thor.Cluster1.PodManagementPolicy | quote }}
   selector:
