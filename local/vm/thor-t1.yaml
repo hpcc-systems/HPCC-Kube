@@ -19,8 +19,6 @@ spec:  # specification of the pod’s contents
       containers:
         - name:  thor-thor1
           image: "hpccsystems/platform"
-          securityContext:
-            privileged: true
           volumeMounts:
             - mountPath: /var/lib/HPCCSystems/hpcc-data
               name: hpcc-data

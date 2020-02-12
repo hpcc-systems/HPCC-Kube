@@ -19,8 +19,6 @@ spec:  # specification of the pod’s contents
       containers:
         - name:  roxie-roxie1
           image: "hpccsystems/platform"
-          securityContext:
-            privileged: true
           ports:
             - name: roxie
               containerPort: 9876
