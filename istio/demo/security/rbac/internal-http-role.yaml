@@ -1,0 +1,13 @@
+apiVersion: "rbac.istio.io/v1alpha1"
+kind: ServiceRole
+metadata:
+  name: internal-http
+  namespace: kube-system
+spec:
+  rules:
+  - services: ["*"]
+    methods: ["GET"]
+    constrains:
+    - key: "destination.labels[app]"
+      values: ["esp-e1"]
+    #  values: ["esp-e1", "roxie-r1", "support"]

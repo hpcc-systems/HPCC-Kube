@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-roxie-roxie1
+  # namespace: default
+  labels:
+    app: roxie-roxie1
+spec:
+  selector:
+    app: svc-roxie-roxie1
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: roxie-roxie1
+spec:  # specification of the pod’s contents
+  serviceName: "svc-roxie-roxie1"
+  replicas: 2
+  podManagementPolicy: "Parallel"  # the default is "OrderedReady"
+  selector:
+    matchLabels:
+      app: svc-roxie-roxie1
+  template:
+    metadata:
+      labels:
+        app: svc-roxie-roxie1
+    spec:
+      containers:
+      - name:  roxie-roxie1
+        image: "hpccsystems/platform"
+        ports:
+        - name: roxie
+          containerPort: 9876
+        - name: roxie-secure
+          containerPort: 19876
+        volumeMounts:
+        -  name: efs-data
+           mountPath: "/var/lib/HPCCSystems/hpcc-data"
+        -  name: efs-mirror
+           mountPath: "/var/lib/HPCCSystems/hpcc-mirror"
+        -  name: efs-queries
+           mountPath: "/var/lib/HPCCSystems/queries"
+  volumeClaimTemplates:
+  - metadata:
+      name: efs-data
+      annotations:
+        volume.beta.kubernetes.io/storage-class: aws-efs
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Mi
+  - metadata:
+      name: efs-mirror
+      annotations:
+        volume.beta.kubernetes.io/storage-class: aws-efs
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Mi
+  - metadata:
+      name: efs-queries
+      annotations:
+        volume.beta.kubernetes.io/storage-class: aws-efs
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Mi

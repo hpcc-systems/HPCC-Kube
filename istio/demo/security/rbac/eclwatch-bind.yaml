@@ -1,0 +1,17 @@
+apiVersion: "rbac.istio.io/v1alpha1"
+kind: ServiceRoleBinding
+metadata:
+  name: eclwatch-bind
+  namespace: default
+spec:
+  subjects:
+  - user: "*"
+  # Instead of user host can be used
+  #- properties:
+      #source.ip: 0.0.0.0/0 # every host
+      # This works . The host is in 172.17.0.x
+      #source.ip: 172.17.0.0/24
+
+  roleRef:
+    kind: ServiceRole
+    name: "eclwatch"

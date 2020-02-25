@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: roxie-{{ .Values.Roxie.Cluster1.Name }}
+  namespace: {{ .Values.NameSpace.Name }}
+  labels:
+    app: roxie-{{ .Values.Roxie.Cluster1.Name }}
+spec:  # specification of the pod’s contents
+  replicas: {{ .Values.Roxie.Cluster1.Replicas }}
+  selector:
+    matchLabels:
+      app: roxie-{{ .Values.Roxie.Cluster1.Name }}
+      cluster: {{ .Values.Roxie.Cluster1.Name }}
+  template:
+    metadata:
+      labels:
+        app: roxie-{{ .Values.Roxie.Cluster1.Name }}
+        cluster: {{ .Values.Roxie.Cluster1.Name }}
+    spec:
+      containers:
+      - name:  roxie-{{ .Values.Roxie.Cluster1.Name }}
+        image: {{ .Values.Hpccsystems.Platform.Image }}
+        ports:
+        - name: {{ .Values.Roxie.Cluster1.Server.Name }}
+          {{- if .Values.secure }}
+          containerPort: {{ .Values.Roxie.Cluster1.Server.SecurePort }}
+          {{- else }}
+          containerPort: {{ .Values.Roxie.Cluster1.Server.Port }}
+          {{- end }}
+        {{- if .Values.AWS.EFS.Enabled }}
+        volumeMounts:
+        - mountPath: "/var/lib/HPCCSystems/hpcc-data"
+          name: roxie1-data
+        - mountPath: "/var/lib/HPCCSystems/hpcc-mirror"
+          name: roxie1-mirror
+        - mountPath: "/var/lib/HPCCSystems/queries"
+          name: roxie1-queries
+        {{- end }}
+      {{- if .Values.AWS.EFS.Enabled }}
+      volumes:
+      - name:  roxie1-data
+        persistentVolumeClaim:
+          claimName: {{ .Values.global.EFS.ClaimName.Data }}
+      - name: roxie1-mirror
+        persistentVolumeClaim:
+          claimName: {{ .Values.global.EFS.ClaimName.Mirror }}
+      - name: roxie1-queries
+        persistentVolumeClaim:
+          claimName: {{ .Values.global.EFS.ClaimName.Queries }}
+      {{- end }}

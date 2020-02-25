@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: configmgr
+spec:
+  selector:
+    app: hpcc-admin
+  ports:
+  - protocol: TCP
+    port: 8015
+    targetPort: 8015
+    name: configmgr
+  type: LoadBalancer
+        #NodePort
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hpcc-admin
+spec:  # specification of the pod’s contents
+  restartPolicy: Never
+  containers:
+    - name: hpcc-admin
+      image: "hpccsystems/hpcc-admin"
+      ports:
+        - containerPort: 8015
+          name: configmgr
+      volumeMounts:
+        - mountPath: /etc/hpcc_config_map
+          name: env-config
+      command: ["/opt/hpcc-tools/run"]
+      args: ["-e", "kube"]
+      #args: ["-D"]
+  volumes:
+    - name: env-config
+      configMap:
+        name: hpcc-config

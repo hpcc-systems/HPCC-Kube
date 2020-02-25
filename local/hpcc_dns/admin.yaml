@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hpcc-admin
+spec:  # specification of the pod’s contents
+  restartPolicy: Never
+  containers:
+    - name: hpcc-admin
+      image: "hpccsystems/hpcc-m:7-admin"
+      ports:
+        - containerPort: 8010
+      volumeMounts:
+        - mountPath: /etc/hpcc_config_map
+          name: env-config
+  volumes:
+    - name: env-config
+      configMap:
+        name: hpcc-config

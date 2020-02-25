@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: roxie-{{ .Values.Roxie.Cluster1.Name }}
+  namespace: {{ .Values.NameSpace.Name }}
+  labels:
+    app: roxie-{{ .Values.Roxie.Cluster1.Name }}
+spec:  # specification of the pod’s contents
+  replicas: {{ .Values.Roxie.Cluster1.Replicas }}
+  selector:
+    matchLabels:
+      app: roxie-{{ .Values.Roxie.Cluster1.Name }}
+      cluster: {{ .Values.Roxie.Cluster1.Name }}
+  template:
+    metadata:
+      labels:
+        app: roxie-{{ .Values.Roxie.Cluster1.Name }}
+        cluster: {{ .Values.Roxie.Cluster1.Name }}
+    spec:
+      containers:
+      - name:  roxie-{{ .Values.Roxie.Cluster1.Name }}
+        image: {{ .Values.Hpccsystems.Platform.Image }}
+        ports:
+        - name: {{ .Values.Roxie.Cluster1.Server.Name }}
+          {{- if .Values.secure }}
+          containerPort: {{ .Values.Roxie.Cluster1.Server.SecurePort }}
+          {{- else }}
+          containerPort: {{ .Values.Roxie.Cluster1.Server.Port }}
+          {{ end }}
+        {{- if .Values.Volumes.HostPath.Enabled }}
+        volumeMounts:
+        - mountPath: "/var/lib/HPCCSystems/hpcc-data"
+          name: hpcc-data
+        - mountPath: "/var/lib/HPCCSystems/hpcc-data1"
+          name: hpcc-data1
+        - mountPath: "/var/lib/HPCCSystems/hpcc-data2"
+          name: hpcc-data2
+        - mountPath: "/var/lib/HPCCSystems/hpcc-data3"
+          name: hpcc-data3
+        - mountPath: "/var/lib/HPCCSystems/hpcc-mirror"
+          name: hpcc-mirror
+        - mountPath: "/var/lib/HPCCSystems/queries"
+          name: hpcc-queries
+        {{- end }}
+      {{- if .Values.Volumes.HostPath.Enabled }}
+      volumes:
+      - name:  hpcc-data
+        hostPath:
+          path: {{ .Values.Volumes.HostPath.Data }}
+          type: {{ .Values.Volumes.HostPath.Type }}
+      - name:  hpcc-data1
+        hostPath:
+          path: {{ .Values.Volumes.HostPath.Data1 }}
+          type: {{ .Values.Volumes.HostPath.Type }}
+      - name:  hpcc-data2
+        hostPath:
+          path: {{ .Values.Volumes.HostPath.Data2 }}
+          type: {{ .Values.Volumes.HostPath.Type }}
+      - name:  hpcc-data3
+        hostPath:
+          path: {{ .Values.Volumes.HostPath.Data3 }}
+          type: {{ .Values.Volumes.HostPath.Type }}
+      - name: hpcc-mirror
+        hostPath:
+          path: {{ .Values.Volumes.HostPath.Mirror }}
+          type: {{ .Values.Volumes.HostPath.Type }}
+      - name: hpcc-queries
+        hostPath:
+          path: {{ .Values.Volumes.HostPath.Queries }}
+          type: {{ .Values.Volumes.HostPath.Type }}
+      {{- end }}

@@ -1,0 +1,14 @@
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: esp-{{ .Values.Esp.Cluster1.Name }}
+  namespace: {{ .Values.NameSpace.Name }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: esp-{{ .Values.Esp.Cluster1.Name }}
+  minReplicas: {{ .Values.Esp.Cluster1.Hpa.Min }}
+  maxReplicas: {{ .Values.Esp.Cluster1.Hpa.Max }}
+  targetCPUUtilizationPercentage: {{ .Values.Esp.Cluster1.Hpa.CpuPercentage }}
+  #targetCPUUtilizationPercentage: 5 # for easy to test

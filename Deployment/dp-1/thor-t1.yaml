@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: thor-thor1
+  labels:
+    app: thor-thor1
+spec:  # specification of the pod’s contents
+  replicas: 1
+  selector:
+     matchLabels:
+       app: thor-thor1
+       cluster: thor1
+  template:
+    metadata:
+      labels:
+        app: thor-thor1
+        cluster: thor1
+    spec:
+      containers:
+        - name:  thor-thor1
+          image: "hpccsystems/platform"

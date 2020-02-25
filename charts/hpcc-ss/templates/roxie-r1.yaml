@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.Roxie.Cluster1.ServiceName }}
+  namespace: {{ .Values.NameSpace.Name }}
+  labels:
+    app: roxie-{{ .Values.Roxie.Cluster1.Name }}
+spec:
+  selector:
+    app: {{ .Values.Roxie.Cluster1.ServiceName }}
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: roxie-{{ .Values.Roxie.Cluster1.Name }}
+  namespace: {{ .Values.NameSpace.Name }}
+spec:  # specification of the pod’s contents
+  serviceName: {{ .Values.Roxie.Cluster1.ServiceName }}
+  replicas: {{ .Values.Roxie.Cluster1.Replicas }}
+  podManagementPolicy: {{ .Values.Roxie.Cluster1.PodManagementPolicy | quote }}
+  selector:
+    matchLabels:
+      app: {{ .Values.Roxie.Cluster1.ServiceName }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.Roxie.Cluster1.ServiceName }}
+    spec:
+      containers:
+      - name:  roxie-{{ .Values.Roxie.Cluster1.Name }}
+        image: {{ .Values.Hpccsystems.Platform.Image }}
+        ports:
+        - name: {{ .Values.Roxie.Cluster1.Server.Name }}
+          {{- if .Values.secure }}
+          containerPort: {{ .Values.Roxie.Cluster1.Server.SecurePort }}
+          {{- else }}
+          containerPort: {{ .Values.Roxie.Cluster1.Server.Port }}
+          {{- end }}
+  {{- if .Values.Persistence.Config.Enabled }}
+        volumeMounts:
+        - mountPath: "/var/lib/HPCCSystems"
+          name: ebs
+  volumeClaimTemplates:
+  - metadata:
+      name: ebs
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: {{ .Values.Persistence.Config.StorageClass }}
+      resources:
+        requests:
+          storage: {{ .Values.Roxie.Cluster1.Volume.Size }}
+  {{- end }}

@@ -1,0 +1,66 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-thor-thor1
+  # namespace: default
+  labels:
+    app: thor-thor1
+spec:
+  selector:
+    app: svc-thor-thor1
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: thor-thor1
+spec:  # specification of the pod’s contents
+  serviceName: "svc-thor-thor1"
+  replicas: 2
+  podManagementPolicy: "Parallel"  # the default is "OrderedReady"
+  selector:
+    matchLabels:
+      app: svc-thor-thor1
+  template:
+    metadata:
+      labels:
+        app: svc-thor-thor1
+    spec:
+      containers:
+      - name:  thor-thor1
+        image: "hpccsystems/platform"
+        volumeMounts:
+        - mountPath: "/var/lib/HPCCSystems/hpcc-data"
+          name: efs-data
+        - mountPath: "/var/lib/HPCCSystems/hpcc-mirror"
+          name: efs-mirror
+        - mountPath: "/var/lib/HPCCSystems/hpcc-queris"
+          name: efs-queries
+  volumeClaimTemplates:
+  - metadata:
+      name: efs-data
+      annotations:
+        volume.beta.kubernetes.io/storage-class: aws-efs
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Mi
+  - metadata:
+      name: efs-mirror
+      annotations:
+        volume.beta.kubernetes.io/storage-class: aws-efs
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Mi
+  - metadata:
+      name: efs-queries
+      annotations:
+        volume.beta.kubernetes.io/storage-class: aws-efs
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Mi

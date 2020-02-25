@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-roxie-roxie2
+  # namespace: default
+  labels:
+    app: roxie-roxie2
+spec:
+  selector:
+    app: svc-roxie-roxie2
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: roxie-roxie2
+spec:  # specification of the pod’s contents
+  serviceName: "svc-roxie-roxie2"
+  replicas: 1
+  podManagementPolicy: "Parallel"  # the default is "OrderedReady"
+  selector:
+    matchLabels:
+      app: svc-roxie-roxie2
+  template:
+    metadata:
+      labels:
+        app: svc-roxie-roxie2
+    spec:
+      containers:
+      - name:  roxie-roxie2
+        image: "hpccsystems/platform"
+        volumeMounts:
+        - mountPath: "/var/lib/HPCCSystems"
+          name: ebs
+  volumeClaimTemplates:
+  - metadata:
+      name: ebs
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: gp2
+      resources:
+        requests:
+          storage: 40Gi

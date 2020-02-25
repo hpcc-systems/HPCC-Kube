@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dali
+spec:  # specification of the pod’s contents
+  restartPolicy: {{ .Values.Dali.RestartPolicy }}
+  containers:
+  - name:  dali
+    image: {{ .Values.Hpccsystems.Platform.Image }}
+    {{- if .Values.AWS.EFS.Enabled }}
+    volumeMounts:
+    - mountPath: "/var/lib/HPCCSystems/hpcc-data"
+      name: dali-data
+    - mountPath: "/var/lib/HPCCSystems/hpcc-mirror"
+      name: dali-mirror
+    {{- end }}
+  {{- if .Values.AWS.EFS.Enabled }}
+  volumes:
+  - name: dali-data
+    persistentVolumeClaim:
+      claimName: efs-data
+  - name: dali-mirror
+    persistentVolumeClaim:
+      claimName: efs-mirror
+  {{- end }}

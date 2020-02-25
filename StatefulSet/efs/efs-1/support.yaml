@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-support
+  #namespace: default
+  labels:
+    app: support
+spec:
+  selector:
+    app: svc-support
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: support
+  labels:
+    app: support
+spec:  # specification of the pod’s contents
+  serviceName: "svc-support"
+  replicas: 1
+  podManagementPolicy: "Parallel"  # the default is "OrderedReady"
+  selector:
+    matchLabels:
+      app: svc-support
+  template:
+    metadata:
+      labels:
+        app: svc-support
+    spec:
+      containers:
+      - name: support
+        image: "hpccsystems/platform"
+        volumeMounts:
+        - mountPath: "/var/lib/HPCCSystems"
+          name: efs
+  volumeClaimTemplates:
+  - metadata:
+      name: efs
+      annotations:
+        volume.beta.kubernetes.io/storage-class: aws-efs
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Mi

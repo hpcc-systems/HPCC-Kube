@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.Support.ServiceName | quote }}
+  namespace: {{ .Values.NameSpace.Name }}
+  labels:
+    app: support
+spec:
+  selector:
+    app: {{ .Values.Support.ServiceName }}
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: support
+  namespace: {{ .Values.NameSpace.Name }}
+  labels:
+    app: support
+spec:  # specification of the pod’s contents
+  serviceName: {{ .Values.Support.ServiceName }}
+  replicas: {{ .Values.Support.Replicas }}
+  podManagementPolicy: {{ .Values.Support.PodManagementPolicy | quote }}
+  selector:
+    matchLabels:
+      app: {{ .Values.Support.ServiceName }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.Support.ServiceName }}
+    spec:
+      containers:
+      - name: support
+        image: {{ .Values.Hpccsystems.Platform.Image }}
+  {{- if .Values.Persistence.Config.Enabled }}
+        volumeMounts:
+        - mountPath: "/var/lib/HPCCSystems"
+          name: ebs
+  volumeClaimTemplates:
+  - metadata:
+      name: ebs
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: {{ .Values.Persistence.Config.StorageClass }}
+      resources:
+        requests:
+          storage: {{ .Values.Support.Volume.Size }}
+  {{- end }}

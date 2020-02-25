@@ -1,0 +1,83 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.Esp.Cluster1.ServiceName }}
+  namespace: {{ .Values.NameSpace.Name }}
+spec:
+  selector:
+    app: esp-{{ .Values.Esp.Cluster1.Name }}
+  ports:
+  - protocol: TCP
+    name: {{ .Values.Esp.Cluster1.EclWatch.Name }}
+    {{- if .Values.secure }}
+    port: {{ .Values.Esp.Cluster1.EclWatch.SecurePort }}
+    targetPort: {{ .Values.Esp.Cluster1.EclWatch.SecurePort }}
+    {{- else }}
+    port: {{ .Values.Esp.Cluster1.EclWatch.Port }}
+    targetPort: {{ .Values.Esp.Cluster1.EclWatch.Port }}
+    {{- end }}
+  - protocol: TCP
+    {{- if .Values.secure }}
+    port: {{ .Values.Esp.Cluster1.WsEcl.SecurePort }}
+    targetPort: {{ .Values.Esp.Cluster1.WsEcl.SecurePort }}
+    {{- else }}
+    port: {{ .Values.Esp.Cluster1.WsEcl.Port }}
+    targetPort: {{ .Values.Esp.Cluster1.WsEcl.Port }}
+    {{- end }}
+    name: {{ .Values.Esp.Cluster1.WsEcl.Name }}
+  - protocol: TCP
+    {{- if .Values.secure }}
+    port: {{ .Values.Esp.Cluster1.WsSql.SecurePort }}
+    targetPort: {{ .Values.Esp.Cluster1.WsSql.SecurePort }}
+    {{- else }}
+    port: {{ .Values.Esp.Cluster1.WsSql.Port }}
+    targetPort: {{ .Values.Esp.Cluster1.WsSql.Port }}
+    {{- end }}
+    name: {{ .Values.Esp.Cluster1.WsSql.Name }}
+  {{- if eq .Values.Cloud.Type "local" }}
+  type: {{ .Values.Esp.LocalServiceType }}
+  {{- else }}
+  type: {{ .Values.Esp.ServiceType }}
+  {{- end }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: esp-{{ .Values.Esp.Cluster1.Name }}
+  namespace: {{ .Values.NameSpace.Name }}
+  labels:
+    app: esp-{{ .Values.Esp.Cluster1.Name }}
+spec:  # specification of the pod’s contents
+  replicas:  {{ .Values.Esp.Cluster1.Replicas }}
+  selector:
+     matchLabels:
+       app: esp-{{ .Values.Esp.Cluster1.Name }}
+       cluster: {{ .Values.Esp.Cluster1.Name }}
+  template:
+    metadata:
+      labels:
+        cluster: {{ .Values.Esp.Cluster1.Name }}
+        app: esp-{{ .Values.Esp.Cluster1.Name }}
+    spec:
+      containers:
+        - name: esp-{{ .Values.Esp.Cluster1.Name }}
+          image: {{ .Values.Hpccsystems.Platform.Image }}
+          ports:
+          - name: {{ .Values.Esp.Cluster1.EclWatch.Name }}
+            {{- if .Values.secure }}
+            containerPort: {{ .Values.Esp.Cluster1.EclWatch.SecurePort }}
+            {{- else }}
+            containerPort: {{ .Values.Esp.Cluster1.EclWatch.Port }}
+            {{- end }}
+          - name: {{ .Values.Esp.Cluster1.WsEcl.Name }}
+            {{- if .Values.secure }}
+            containerPort: {{ .Values.Esp.Cluster1.WsEcl.SecurePort }}
+            {{- else }}
+            containerPort: {{ .Values.Esp.Cluster1.WsEcl.Port }}
+            {{- end }}
+          - name: {{ .Values.Esp.Cluster1.WsSql.Name }}
+            {{- if .Values.secure }}
+            containerPort: {{ .Values.Esp.Cluster1.WsSql.SecurePort }}
+            {{- else }}
+            containerPort: {{ .Values.Esp.Cluster1.WsSql.Port }}
+            {{- end }}

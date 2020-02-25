@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: roxie-roxie1
+  labels:
+    app: roxie-roxie1
+spec:  # specification of the pod’s contents
+  replicas: 1
+  selector:
+    matchLabels:
+      app: roxie-roxie1
+      cluster: roxie1
+  template:
+    metadata:
+      labels:
+        app: roxie-roxie1
+        cluster: roxie1
+    spec:
+      containers:
+        - name:  roxie-roxie1
+          image: "hpccsystems/platform"
+          ports:
+            - name: roxie
+              containerPort: 9876
+            - name: roxie-secure
+              containerPort: 19876
+          volumeMounts:
+            - mountPath: /var/lib/HPCCSystems/hpcc-data
+              name: hpcc-data
+            - mountPath: /var/lib/HPCCSystems/hpcc-data1
+              name: hpcc-data1
+            - mountPath: /var/lib/HPCCSystems/hpcc-data2
+              name: hpcc-data2
+            - mountPath: /var/lib/HPCCSystems/hpcc-data3
+              name: hpcc-data3
+            - mountPath: /var/lib/HPCCSystems/hpcc-mirror
+              name: hpcc-mirror
+            - mountPath: /var/lib/HPCCSystems/queries
+              name: queries
+      volumes:
+        - name: hpcc-data
+          hostPath:
+            path: /HPCCSystems/hpcc-data
+            type: DirectoryOrCreate
+        - name: hpcc-data1
+          hostPath:
+            path: /HPCCSystems/hpcc-data1
+            type: DirectoryOrCreate
+        - name: hpcc-data2
+          hostPath:
+            path: /HPCCSystems/hpcc-data2
+            type: DirectoryOrCreate
+        - name: hpcc-data3
+          hostPath:
+            path: /HPCCSystems/hpcc-data3
+            type: DirectoryOrCreate
+        - name: queries
+          hostPath:
+            path: /HPCCSystems/queries
+            type: DirectoryOrCreate
+        - name: hpcc-mirror
+          hostPath:
+            path: /HPCCSystems/hpcc-mirror
+            type: DirectoryOrCreate

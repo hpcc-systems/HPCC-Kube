@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: thormaster-{{ .Values.Thor.Cluster1.Name }}
+  namespace: {{ .Values.NameSpace.Name }}
+spec:  # specification of the pod’s contents
+  restartPolicy: {{ .Values.ThorMaster.RestartPolicy }}
+  containers:
+    - name:  {{ .Values.ThorMaster.CompName }}-{{ .Values.Thor.Cluster1.Name }}
+      image: {{ .Values.Hpccsystems.Platform.Image }}

@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: roxie-roxie1
+  labels:
+    app: roxie-roxie1
+spec:  # specification of the pod’s contents
+  replicas: 1
+  selector:
+    matchLabels:
+      app: roxie-roxie1
+      cluster: roxie1
+  template:
+    metadata:
+      labels:
+        app: roxie-roxie1
+        cluster: roxie1
+    spec:
+      containers:
+        - name:  roxie-roxie1
+          image: "hpccsystems/platform"
+          ports:
+          - name: roxie
+            containerPort: 9876
+          - name: roxie-secure
+            containerPort: 19876

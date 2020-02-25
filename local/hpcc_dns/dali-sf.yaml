@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-dali
+#  namespace: default
+  labels:
+    app: dali
+spec:
+  #ports:
+  #- port: 8010
+  #  name: esp-e1
+  selector:
+    app: svc-dali
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: dali
+spec:  # specification of the pod’s contents
+  serviceName: "svc-dali"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: svc-dali
+  template:
+    metadata:
+      labels:
+        app: svc-dali
+    spec:
+      containers:
+        - name: dali
+          image: "hpccsystems/hpcc:7.2.20-1"

@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-support
+#  namespace: default
+  labels:
+    app: support
+spec:
+  selector:
+    app: svc-support
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: support
+spec:  # specification of the pod’s contents
+  serviceName: "svc-support"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: svc-support
+  template:
+    metadata:
+      labels:
+        app: svc-support
+    spec:
+      containers:
+        - name: support
+          image: "hpccsystems/hpcc:7.2.20-1"
